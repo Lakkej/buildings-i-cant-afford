@@ -7,16 +7,46 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  chrome:
+    image: selenium/standalone-chrome:latest
+    privileged: true
+    shm_size: 2g
+
+  scraper:
+    build: ./scraper
+    depends_on:
+      chrome:
+        condition: service_started
+      db:
+        condition: service_healthy
+
   server:
     build: ./server
     ports:
       - "5000:5000"
     depends_on:
-      - db
+      scraper:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+
+  web:
+    build: ./web
+    ports:
+      - "8000:3000"
+    depends_on:
+      server:
+        condition: service_started
 
 volumes:
   pgdata:
