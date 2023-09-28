@@ -1,5 +1,5 @@
-import pgp from "pg-promise";
 import { exit } from "process";
+import pgp from "pg-promise";
 import { Builder, By, until } from "selenium-webdriver";
 
 const TOTAL_PAGES = 500 / 20;
