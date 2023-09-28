@@ -1,6 +1,6 @@
-import { PropertyTile } from "./components";
 import { Box, Paper } from "@mui/material";
 import { Property } from "../../types";
+import { PropertyTile } from "./components";
 
 import "./PropertyList.css";
 

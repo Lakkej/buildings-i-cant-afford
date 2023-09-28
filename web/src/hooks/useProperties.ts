@@ -1,7 +1,3 @@
-// create hook useProperties that call on backend (localhost:5000/) this returns list of properties.
-// the BE returns a paginated list of properties, based on page and size params.
-// the hook returns the list of properties and the total number of properties
-
 import { useEffect, useState } from "react";
 import { Property } from "../types";
 

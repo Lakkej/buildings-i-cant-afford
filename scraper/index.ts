@@ -1,6 +1,6 @@
-import { Builder, By, until } from "selenium-webdriver";
 import pgp from "pg-promise";
 import { exit } from "process";
+import { Builder, By, until } from "selenium-webdriver";
 
 const TOTAL_PAGES = 500 / 20;
 const PROPERTIES_SELECTOR = ".property";
@@ -31,7 +31,7 @@ const db = pgSetup({
 db.connect()
   .then((obj) => {
     console.log("Connected to the database");
-    obj.done(); // Success, release the connection
+    obj.done();
   })
   .catch((error) => {
     console.error("Error connecting to the database:", error);

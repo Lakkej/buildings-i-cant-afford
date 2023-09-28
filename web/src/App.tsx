@@ -1,7 +1,8 @@
-import "./App.css";
-import { Pagination, PropertyList } from "./components";
 import { Typography } from "@mui/material";
-import { useProperties } from "./hooks/useProperties";
+import { Pagination, PropertyList } from "./components";
+import { useProperties } from "./hooks";
+
+import "./App.css";
 
 function App() {
   const { fetching, page, properties, setPage, setSize, size, total } =
