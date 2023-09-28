@@ -38,6 +38,15 @@ db.connect()
     exit();
   });
 
+const deletePreviousData = async () => {
+  try {
+    await db.none("DELETE FROM properties");
+    console.log("Data deleted successfully");
+  } catch (error) {
+    console.log("Error deleting data", error);
+  }
+}
+
 const insertData = async (data: Property[]) => {
   console.log(`rows to insert: ${data.length}`);
   const cs = new pgSetup.helpers.ColumnSet(
@@ -57,12 +66,15 @@ const insertData = async (data: Property[]) => {
 
 async function main() {
   try {
+    await deletePreviousData();
+
     const driver = await new Builder()
       .forBrowser("chrome")
       .usingServer(`http://chrome:4444/wd/hub`)
       .build();
     const data: Property[] = [];
     console.log("Starting scraping");
+    
     for (let index = 1; index <= TOTAL_PAGES; index++) {
       console.log(`Scraping page ${index}`);
       await driver.get(
@@ -72,9 +84,9 @@ async function main() {
 
       const properties = await driver.findElements(By.css(PROPERTIES_SELECTOR));
 
-      const noPaidContentProperties = properties.slice(1);
+      const noPromotedProperties = properties.slice(1);
 
-      for (const property of noPaidContentProperties) {
+      for (const property of noPromotedProperties) {
         const title = await property
           .findElement(By.css(PROPERTY_TITLE_SELECTOR))
           .getText();
